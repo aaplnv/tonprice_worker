@@ -11,7 +11,7 @@ import (
 
 func StartBot() {
 	pref := botapi.Settings{
-		Token:  os.Getenv("TOKEN"),
+		Token:  os.Getenv("TELEGRAM_BOT_APIKEY"),
 		Poller: &botapi.LongPoller{Timeout: 10 * time.Second},
 	}
 

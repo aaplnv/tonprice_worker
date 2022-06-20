@@ -7,7 +7,7 @@ import (
 
 func getQuote() (*cmc.Quote, error) {
 	client := cmc.NewClient(&cmc.Config{
-		ProAPIKey: os.Getenv("APIKEY"),
+		ProAPIKey: os.Getenv("COINMARKETCAP_APIKEY"),
 	})
 
 	results, err := client.Cryptocurrency.LatestQuotes(&cmc.QuoteOptions{
