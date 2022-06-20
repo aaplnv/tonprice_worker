@@ -2,8 +2,8 @@ package telegram
 
 import (
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	botapi "gopkg.in/telebot.v3"
-	"log"
 	"main/markets"
 	"os"
 	"time"
@@ -15,15 +15,26 @@ func StartBot() {
 		Poller: &botapi.LongPoller{Timeout: 10 * time.Second},
 	}
 
-	b, err := botapi.NewBot(pref)
+	log.Info("Telegram trying to login...")
+	bot, err := botapi.NewBot(pref)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
+	log.Info("Logged in!")
 
-	b.Handle("/start", func(c botapi.Context) error {
-		return c.Send(fmt.Sprintln("TON price:", markets.GetPrice(), "USD"))
+	bot.Handle("/start", func(c botapi.Context) error {
+		log.WithFields(log.Fields{
+			"ID":       c.Message().Sender.ID,
+			"Username": c.Message().Sender.Username,
+		}).Info("New price request")
+		price, err := markets.GetPrice()
+		if err != nil {
+			return c.Send(fmt.Sprintln("Sorry, failed to get price from CoinMarketCap"))
+		}
+		return c.Send(fmt.Sprintln("TON price:", price, "USD"))
 	})
 
-	b.Start()
+	log.Info("Starting a bot...")
+	bot.Start()
 }

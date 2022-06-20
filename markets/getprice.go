@@ -1,16 +1,16 @@
 package markets
 
 import (
-	"fmt"
+	log "github.com/sirupsen/logrus"
 	"math"
 )
 
 // GetPrice Gets current TON price via CoinMarketCap API
-func GetPrice() float64 {
+func GetPrice() (float64, error) {
 	quote, err := getQuote()
 	if err != nil {
-		fmt.Println(err)
-		return 0
+		log.Error("Can't get information from CoinMarketCap: ", err)
+		return 0, err
 	}
-	return math.Round(quote.Price*100) / 100
+	return math.Round(quote.Price*100) / 100, nil
 }
