@@ -2,6 +2,7 @@ package markets
 
 import (
 	"fmt"
+	"math"
 )
 
 // GetPrice Gets current TON price via CoinMarketCap API
@@ -11,5 +12,5 @@ func GetPrice() float64 {
 		fmt.Println(err)
 		return 0
 	}
-	return quote.Price
+	return math.Round(quote.Price*100) / 100
 }

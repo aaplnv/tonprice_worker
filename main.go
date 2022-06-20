@@ -1,10 +1,17 @@
 package main
 
 import (
-	"fmt"
-	"main/markets"
+	"main/telegram"
+	"sync"
 )
 
+var wg sync.WaitGroup
+
 func main() {
-	fmt.Println("TON price:", markets.GetPrice())
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		telegram.StartBot()
+	}()
+	wg.Wait()
 }
