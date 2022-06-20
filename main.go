@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"main/markets"
+)
+
 func main() {
-	print("Hello world!")
+	fmt.Println("TON price:", markets.GetPrice())
 }
