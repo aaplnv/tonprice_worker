@@ -6,8 +6,8 @@ import (
 )
 
 // GetPrice Gets current TON price via CoinMarketCap API
-func GetPrice() (float64, error) {
-	quote, err := getQuote()
+func GetPrice(fiatcurrency string) (float64, error) {
+	quote, err := getQuote(fiatcurrency)
 	if err != nil {
 		log.Error("Can't get information from CoinMarketCap: ", err)
 		return 0, err

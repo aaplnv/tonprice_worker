@@ -27,12 +27,16 @@ func StartBot() {
 		log.WithFields(log.Fields{
 			"ID":       c.Message().Sender.ID,
 			"Username": c.Message().Sender.Username,
-		}).Info("New price request")
-		price, err := markets.GetPrice()
+		}).Info("New usdprice request")
+		usdprice, err := markets.GetPrice("USD")
 		if err != nil {
-			return c.Send(fmt.Sprintln("Sorry, failed to get price from CoinMarketCap"))
+			return c.Send(fmt.Sprintln("Sorry, failed to get usdprice from CoinMarketCap"))
 		}
-		return c.Send(fmt.Sprintln("TON price:", price, "USD"))
+		rubprice, err := markets.GetPrice("RUB")
+		if err != nil {
+			return c.Send(fmt.Sprintln("Sorry, failed to get usdprice from CoinMarketCap"))
+		}
+		return c.Send(fmt.Sprintln("TON price:", usdprice, "USD", "or", rubprice, "RUB"))
 	})
 
 	log.Info("Starting a bot...")
