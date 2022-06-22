@@ -29,7 +29,7 @@ func StartBot() {
 			"Username": c.Message().Sender.Username,
 		}).Info("New usdprice request")
 
-		fiat := "USD"
+		fiat := os.Getenv("FIAT_CURRENCY")
 		usdprice, err := markets.GetPrice(fiat)
 		if err != nil {
 			return c.Send(fmt.Sprintln("Sorry, failed to get usdprice from CoinMarketCap"))
