@@ -13,5 +13,5 @@ RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -
     rm -rf /var/lib/apt/lists/*
 COPY --from=builder /build/main /app/
 WORKDIR /app
-COPY tonprice.env ./
+COPY settings.env ./
 CMD ["./main"]
