@@ -11,7 +11,7 @@ import (
 var wg sync.WaitGroup
 
 func init() {
-	err := godotenv.Load("tonprice.env")
+	err := godotenv.Load("settings.env")
 	if err != nil {
 		log.Fatal(err)
 	}
