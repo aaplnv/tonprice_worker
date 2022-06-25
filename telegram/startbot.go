@@ -27,19 +27,15 @@ func StartBot() {
 		log.WithFields(log.Fields{
 			"ID":       c.Message().Sender.ID,
 			"Username": c.Message().Sender.Username,
-		}).Info("New usdprice request")
+		}).Info("New price request")
 
 		fiat := os.Getenv("FIAT_CURRENCY")
-		usdprice, err := markets.GetPrice(fiat)
+		price, err := markets.GetPrice(fiat)
 		if err != nil {
-			return c.Send(fmt.Sprintln("Sorry, failed to get usdprice from CoinMarketCap"))
+			return c.Send(fmt.Sprintln("Sorry, failed to get price from CoinMarketCap"))
 		}
-		//rubprice, err := markets.GetPrice("RUB")
-		//if err != nil {
-		//	return c.Send(fmt.Sprintln("Sorry, failed to get usdprice from CoinMarketCap"))
-		//}
 
-		answer := fmt.Sprint(os.Getenv("PRICE_ROW"), " ", usdprice, " ", fiat) + "\n\n" + os.Getenv("EXCHANGES_ROW") + "\n\n" + os.Getenv("AD_ROW")
+		answer := fmt.Sprint(os.Getenv("PRICE_ROW"), " ", price, " ", fiat) + "\n\n" + os.Getenv("EXCHANGES_ROW") + "\n\n" + os.Getenv("AD_ROW")
 		return c.Send(answer)
 	})
 

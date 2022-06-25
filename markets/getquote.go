@@ -1,15 +1,11 @@
 package markets
 
 import (
-	"errors"
 	cmc "github.com/miguelmota/go-coinmarketcap/pro/v1"
 	"os"
 )
 
 func getQuote(fiatcurrency string) (*cmc.Quote, error) {
-	if fiatcurrency != "USD" && fiatcurrency != "RUB" {
-		return nil, errors.New(fiatcurrency + " is not supported")
-	}
 	client := cmc.NewClient(&cmc.Config{
 		ProAPIKey: os.Getenv("COINMARKETCAP_APIKEY"),
 	})
