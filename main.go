@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/jasonlvhit/gocron"
 	"main/cache"
 	"main/telegram"
 	"sync"
@@ -24,10 +25,13 @@ func init() {
 func main() {
 	log.Info("Starting application...")
 	cache.UpdateCache()
-	wg.Add(1)
+
+	wg.Add(2)
 	go func() {
 		defer wg.Done()
 		telegram.StartBot()
 	}()
+	gocron.Every(10).Seconds().Do(cache.UpdateCache)
+	go gocron.Start()
 	wg.Wait()
 }
