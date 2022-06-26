@@ -1,6 +1,7 @@
 package main
 
 import (
+	"main/cache"
 	"main/telegram"
 	"sync"
 
@@ -22,6 +23,7 @@ func init() {
 
 func main() {
 	log.Info("Starting application...")
+	cache.UpdateCache()
 	wg.Add(1)
 	go func() {
 		defer wg.Done()

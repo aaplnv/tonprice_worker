@@ -4,7 +4,7 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	botapi "gopkg.in/telebot.v3"
-	"main/markets"
+	"main/cache"
 	"os"
 	"time"
 )
@@ -30,10 +30,7 @@ func StartBot() {
 		}).Info("New price request")
 
 		fiat := os.Getenv("FIAT_CURRENCY")
-		price, err := markets.GetPrice(fiat)
-		if err != nil {
-			return c.Send(fmt.Sprintln("Sorry, failed to get price from CoinMarketCap"))
-		}
+		price := cache.USDLatest.Price
 
 		answer := fmt.Sprint(os.Getenv("PRICE_ROW"), " ", price, " ", fiat) + "\n\n" + os.Getenv("EXCHANGES_ROW") + "\n\n" + os.Getenv("AD_ROW")
 		return c.Send(answer)
