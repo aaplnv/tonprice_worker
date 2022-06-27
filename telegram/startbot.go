@@ -29,10 +29,9 @@ func StartBot() {
 			"Username": c.Message().Sender.Username,
 		}).Info("New price request")
 
-		fiat := os.Getenv("FIAT_CURRENCY")
 		price := cache.USDLatest.Price
 
-		answer := fmt.Sprint(os.Getenv("PRICE_ROW"), " ", price, " ", fiat) + "\n\n" + os.Getenv("EXCHANGES_ROW") + "\n\n" + os.Getenv("AD_ROW")
+		answer := fmt.Sprint(os.Getenv("PRICE_ROW"), " ", price, " ", "USD") + "\n\n" + os.Getenv("EXCHANGES_ROW") + "\n\n" + os.Getenv("AD_ROW")
 		return c.Send(answer)
 	})
 
