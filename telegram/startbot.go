@@ -9,6 +9,9 @@ import (
 	"time"
 )
 
+var gotousd = (&botapi.ReplyMarkup{}).Data("🔄 USD", "goto_usd", "sjdgsdflgdfg")
+var returntomaincurr = (&botapi.ReplyMarkup{}).Data("🔄 RUB", "returntomaincurr", "sdfgjsdkfg")
+
 func StartBot() {
 	pref := botapi.Settings{
 		Token:  os.Getenv("TELEGRAM_BOT_APIKEY"),
@@ -16,6 +19,7 @@ func StartBot() {
 	}
 
 	log.Info("Telegram trying to login...")
+
 	bot, err := botapi.NewBot(pref)
 	if err != nil {
 		log.Fatal(err)
@@ -28,14 +32,43 @@ func StartBot() {
 			"ID":       c.Message().Sender.ID,
 			"Username": c.Message().Sender.Username,
 		}).Info("New price request")
+		return c.Send(proceedRequest("RUB"))
+	})
 
-		answer := buildPriceRow("RUB") + "\n\n" + os.Getenv("EXCHANGES_ROW") + "\n\n" + os.Getenv("AD_ROW")
+	bot.Handle(&gotousd, func(c botapi.Context) error {
+		log.WithFields(log.Fields{
+			"ID":       c.Message().Sender.ID,
+			"Username": c.Message().Sender.Username,
+		}).Info("New price request")
+		c.Edit(proceedRequest("USD"))
+		return c.Respond()
+	})
 
-		return c.Send(answer)
+	bot.Handle(&returntomaincurr, func(c botapi.Context) error {
+		log.WithFields(log.Fields{
+			"ID":       c.Message().Sender.ID,
+			"Username": c.Message().Sender.Username,
+		}).Info("New price request")
+		c.Edit(proceedRequest("RUB"))
+		return c.Respond()
 	})
 
 	log.Info("Starting a bot...")
 	bot.Start()
+}
+
+func proceedRequest(currency string) (string, *botapi.ReplyMarkup) {
+	answer := buildPriceRow(currency) + "\n\n" + os.Getenv("EXCHANGES_ROW") + "\n\n" + os.Getenv("AD_ROW")
+
+	r := botapi.ReplyMarkup{}
+
+	if currency == "USD" {
+		r.Inline(r.Row(returntomaincurr, r.Data("🛎 Notify", "notifyme")))
+	} else {
+		r.Inline(r.Row(gotousd, r.Data("🛎 Notify", "notifyme")))
+	}
+
+	return answer, &r
 }
 
 func buildPriceRow(currency string) string {
