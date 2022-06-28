@@ -11,6 +11,11 @@ import (
 
 var gotousd = (&botapi.ReplyMarkup{}).Data("🔄 USD", "goto_usd", "sjdgsdflgdfg")
 var returntomaincurr = (&botapi.ReplyMarkup{}).Data("🔄 RUB", "returntomaincurr", "sdfgjsdkfg")
+var subbtn = (&botapi.ReplyMarkup{}).Data("🛎 Subscribe", "subbtn", "shjfsdf")
+var unsubbtn = (&botapi.ReplyMarkup{}).Data("🔕 Unsubscribe", "unsubbtn", "shdfjksldqwe")
+var confirmsubbtn = (&botapi.ReplyMarkup{}).Data("Confirm subscription", "confirmsubbtn", "svfderwer")
+var confirmusdbtn = (&botapi.ReplyMarkup{}).Data("Confirm subscription in USD", "confirmsubusdbtn", "svfderwer")
+var cancelbtn = (&botapi.ReplyMarkup{}).Data("Cancel", "cancel", "sgdhfsjkewrvb")
 
 func StartBot() {
 	pref := botapi.Settings{
@@ -44,7 +49,23 @@ func StartBot() {
 		return c.Respond()
 	})
 
+	bot.Handle(&subbtn, func(c botapi.Context) error {
+		r := botapi.ReplyMarkup{}
+		r.Inline(r.Row(confirmsubbtn), r.Row(confirmusdbtn), r.Row(cancelbtn))
+		c.Edit("We will notify you when price changes more than for 10% at any direction from your active currency (RUB)\n\nDo you confirm your subscription?", &r)
+		return c.Respond()
+	})
+
 	bot.Handle(&returntomaincurr, func(c botapi.Context) error {
+		log.WithFields(log.Fields{
+			"ID":       c.Message().Sender.ID,
+			"Username": c.Message().Sender.Username,
+		}).Info("New price request")
+		c.Edit(proceedRequest("RUB"))
+		return c.Respond()
+	})
+
+	bot.Handle(&cancelbtn, func(c botapi.Context) error {
 		log.WithFields(log.Fields{
 			"ID":       c.Message().Sender.ID,
 			"Username": c.Message().Sender.Username,
@@ -63,9 +84,9 @@ func proceedRequest(currency string) (string, *botapi.ReplyMarkup) {
 	r := botapi.ReplyMarkup{}
 
 	if currency == "USD" {
-		r.Inline(r.Row(returntomaincurr, r.Data("🛎 Notify", "notifyme")))
+		r.Inline(r.Row(returntomaincurr, subbtn))
 	} else {
-		r.Inline(r.Row(gotousd, r.Data("🛎 Notify", "notifyme")))
+		r.Inline(r.Row(gotousd, subbtn))
 	}
 
 	return answer, &r

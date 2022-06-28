@@ -482,6 +482,7 @@ func UpdateCache() {
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
+
 		}
 
 		if currency == "SAR" {
