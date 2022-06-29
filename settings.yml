@@ -2,6 +2,16 @@ settings:
   token:
   parse_mode: html
 
+buttons:
+  swap:
+    unique: swap
+    callback_data: '{{ . }}'
+    text: 🔄 {{ . }}
+
+markups:
+  swap:
+    - [ swap ]
+
 config:
   mariadb.host:
   mariadb.port:

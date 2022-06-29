@@ -33,13 +33,26 @@ func StartBot() {
 		return c.Send(proceedRequest("RUB", lt))
 	})
 
+	bot.Handle(lt.Callback("swap"), func(c telebot.Context) error {
+		log.WithFields(log.Fields{
+			"ID":       c.Message().Sender.ID,
+			"Username": c.Message().Sender.Username,
+		}).Info("New price request")
+
+		print(lt.Get("layouts"))
+		return c.Edit(proceedRequest(c.Callback().Data, lt))
+	})
+
 	log.Info("Starting a bot...")
 	bot.Start()
 }
 
 func proceedRequest(currency string, lt *layout.DefaultLayout) (string, *telebot.ReplyMarkup) {
 	answer := buildPriceRow(currency, lt) + "\n\n" + lt.Text("exchanges_row") + "\n\n" + lt.Text("ad_row")
-	return answer, nil
+	if currency == "USD" {
+		return answer, lt.Markup("swap", "RUB")
+	}
+	return answer, lt.Markup("swap", "USD")
 }
 
 func buildPriceRow(currency string, lt *layout.DefaultLayout) string {
