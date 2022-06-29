@@ -5,6 +5,7 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	log "github.com/sirupsen/logrus"
+	"gopkg.in/telebot.v3/layout"
 	"main/ent"
 	"main/ent/aedquote"
 	"main/ent/arsquote"
@@ -38,21 +39,23 @@ import (
 	"main/ent/uahquote"
 	"main/ent/usdquote"
 	"main/ent/zarquote"
-	"os"
-	"strings"
 	"time"
 )
 
 func UpdateCache() {
 	log.Info("Updating cache...")
-	client, err := ent.Open("mysql", fmt.Sprint(os.Getenv("MDB_LOGIN"), ":", os.Getenv("MDB_PASSWORD"), "@tcp(", os.Getenv("MDB_HOST"), ":", os.Getenv("MDB_PORT"), ")/charts?parseTime=True"))
+	lt, err := layout.NewDefault("settings.yml", "default")
+	if err != nil {
+		log.Fatal(err)
+	}
+	client, err := ent.Open("mysql", fmt.Sprint(lt.String("mariadb.login"), ":", lt.String("mariadb.password"), "@tcp(", lt.String("mariadb.host"), ":", lt.String("mariadb.port"), ")/charts?parseTime=True"))
 	if err != nil {
 		log.Error("Can't connect to MySQL", err)
 		return
 	}
 	defer client.Close()
 
-	currencies := strings.Split(os.Getenv("FIAT_CURRENCY"), " ")
+	currencies := lt.Strings("currencies")
 
 	for _, currency := range currencies {
 

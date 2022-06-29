@@ -13,6 +13,11 @@ markups:
     - [ swap ]
 
 config:
+  currencies:
+    - RUB
+    - USD
+    - EUR
+    - GBP
   mariadb.host:
   mariadb.port:
   mariadb.login:
