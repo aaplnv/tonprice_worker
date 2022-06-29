@@ -3,51 +3,46 @@ package telegram
 import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
-	botapi "gopkg.in/telebot.v3"
+	"gopkg.in/telebot.v3"
+	"gopkg.in/telebot.v3/layout"
 	"main/cache"
-	"os"
-	"time"
 )
 
 func StartBot() {
-	pref := botapi.Settings{
-		Token:  os.Getenv("TELEGRAM_BOT_APIKEY"),
-		Poller: &botapi.LongPoller{Timeout: 10 * time.Second},
+	lt, err := layout.NewDefault("settings.yml", "default")
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	log.Info("Telegram trying to login...")
 
-	bot, err := botapi.NewBot(pref)
+	bot, err := telebot.NewBot(lt.Settings())
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
+
 	log.Info("Logged in!")
 
-	bot.Handle("/start", func(c botapi.Context) error {
+	bot.Handle("/start", func(c telebot.Context) error {
 		log.WithFields(log.Fields{
 			"ID":       c.Message().Sender.ID,
 			"Username": c.Message().Sender.Username,
 		}).Info("New price request")
-		return c.Send(proceedRequest("RUB"))
+
+		return c.Send(proceedRequest("RUB", lt))
 	})
 
 	log.Info("Starting a bot...")
 	bot.Start()
 }
 
-func proceedRequest(currency string) (string, *botapi.ReplyMarkup) {
-	answer := buildPriceRow(currency) + "\n\n" + os.Getenv("EXCHANGES_ROW") + "\n\n" + os.Getenv("AD_ROW")
-
-	if currency == "USD" {
-		r.Inline(r.Row(r.Data("🔄 RUB", "")))
-	} else {
-		r.Inline(r.Row(r.Data("🔄 RUB", "")))
-	}
-	return answer, &r
+func proceedRequest(currency string, lt *layout.DefaultLayout) (string, *telebot.ReplyMarkup) {
+	answer := buildPriceRow(currency, lt) + "\n\n" + lt.Text("exchanges_row") + "\n\n" + lt.Text("ad_row")
+	return answer, nil
 }
 
-func buildPriceRow(currency string) string {
+func buildPriceRow(currency string, lt *layout.DefaultLayout) string {
 	var price float64
 	switch currency {
 	case "AED":
@@ -114,6 +109,8 @@ func buildPriceRow(currency string) string {
 		price = cache.USDLatest.Price
 	case "ZAR":
 		price = cache.ZARLatest.Price
+	default:
+		log.Error("Unknown currency: " + currency)
 	}
-	return fmt.Sprint(os.Getenv("PRICE_ROW"), " ", price, " ", currency)
+	return fmt.Sprint(lt.Text("price_row"), " ", price, " ", currency)
 }

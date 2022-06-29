@@ -1,0 +1,9 @@
+settings:
+  token:
+  parse_mode: html
+
+config:
+  mariadb.host:
+  mariadb.port:
+  mariadb.login:
+  mariadb.password:
