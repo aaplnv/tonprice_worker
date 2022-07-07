@@ -22,6 +22,26 @@ func StartBot() {
 		return
 	}
 
+	bot.Handle("/select", func(c telebot.Context) error {
+		items := []string{"USD", "RUB", "EUR", "GBP"}
+		btns := make([]telebot.Btn, len(items))
+
+		for i, item := range items {
+			btns[i] = *lt.Button("select", struct {
+				Ticker string
+				Text   string
+			}{
+				Ticker: item,
+				Text:   item,
+			})
+		}
+
+		m := bot.NewMarkup()
+		m.Inline(m.Row(btns...))
+
+		return c.Send("Select currency", m)
+	})
+
 	log.Info("Logged in!")
 
 	bot.Handle("/start", func(c telebot.Context) error {
