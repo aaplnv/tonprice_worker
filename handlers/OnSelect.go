@@ -20,21 +20,47 @@ func OnSelect(c telebot.Context) error {
 
 	user := database.GetUser(c.Sender().ID)
 
-	items := strings.Split(user.ActiveStable, " ")
+	if c.Callback() != nil && c.Callback().Data != "" {
+
+		if strings.Contains(user.AllStables, c.Callback().Data) {
+			database.SetAllStables(strings.ReplaceAll(user.AllStables, c.Callback().Data, ""), user.TelegramId)
+			user = database.GetUser(c.Sender().ID)
+		} else {
+			database.SetAllStables(user.AllStables+" "+c.Callback().Data, user.TelegramId)
+			user = database.GetUser(c.Sender().ID)
+		}
+	}
+
+	//allbtns := strings.Split(user.ActiveStable, " ")
+	items := lt.Strings("currencies")
 	btns := make([]telebot.Btn, len(items))
 
 	for i, item := range items {
+		if item == "" {
+			continue
+		}
+		text := ""
+		if strings.Contains(user.AllStables, item) {
+			text = "✅" + " " + item
+		} else {
+			text = item
+		}
 		btns[i] = *lt.Button("select", struct {
 			Ticker string
 			Text   string
 		}{
 			Ticker: item,
-			Text:   item,
+			Text:   text,
 		})
 	}
 
 	m := c.Bot().NewMarkup()
-	m.Inline(m.Row(btns...))
 
-	return c.Send("Select currency", m)
+	if user.AllStables != "" {
+		m.Inline(m.Row(btns...), m.Row(*lt.Button("done")))
+	} else {
+		m.Inline(m.Row(btns...))
+	}
+
+	return c.EditOrSend("Select currency", m)
 }
