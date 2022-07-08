@@ -1,11 +1,15 @@
 package telegram
 
 import (
+	"context"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/telebot.v3"
 	"gopkg.in/telebot.v3/layout"
 	"main/cache"
+	"main/ent"
+	"main/ent/user"
+	"time"
 )
 
 func StartBot() {
@@ -23,6 +27,8 @@ func StartBot() {
 	}
 
 	bot.Handle("/select", func(c telebot.Context) error {
+		user := getUser(c.Sender().ID)
+		fmt.Println(user)
 		items := []string{"USD", "RUB", "EUR", "GBP"}
 		btns := make([]telebot.Btn, len(items))
 
@@ -73,6 +79,30 @@ func proceedRequest(currency string, lt *layout.DefaultLayout) (string, *telebot
 		return answer, lt.Markup("swap", "RUB")
 	}
 	return answer, lt.Markup("swap", "USD")
+}
+
+func getUser(id int64) *ent.User {
+	lt, err := layout.NewDefault("settings.yml", "default")
+	if err != nil {
+		log.Fatal(err)
+	}
+	client, err := ent.Open("mysql", fmt.Sprint(lt.String("mariadb.login"), ":", lt.String("mariadb.password"), "@tcp(", lt.String("mariadb.host"), ":", lt.String("mariadb.port"), ")/testone?parseTime=True"))
+	if err != nil {
+		log.Error("Can't connect to MySQL", err)
+	}
+	defer client.Close()
+
+	// TODO: Automatic tables migration
+
+	user, err := client.User.Query().Where(user.TelegramId(id)).Only(context.Background())
+	if err != nil {
+		user, err = client.User.Create().SetTelegramId(id).SetRegTime(time.Now()).Save(context.Background())
+		if err != nil {
+			log.Error(err)
+		}
+	}
+
+	return user
 }
 
 func buildPriceRow(currency string, lt *layout.DefaultLayout) string {

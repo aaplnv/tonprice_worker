@@ -37,6 +37,8 @@ var UAHLatest = LatestQuote{}
 var USDLatest = LatestQuote{}
 var ZARLatest = LatestQuote{}
 
+var LatestQuotes = map[string]LatestQuote{}
+
 type LatestQuote struct {
 	Price     float64
 	Timestamp time.Time

@@ -55,6 +55,7 @@ type hooks struct {
 	TWDQuote  []ent.Hook
 	UAHQuote  []ent.Hook
 	USDQuote  []ent.Hook
+	User      []ent.Hook
 	ZARQuote  []ent.Hook
 }
 

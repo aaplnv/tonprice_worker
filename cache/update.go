@@ -42,7 +42,7 @@ import (
 	"time"
 )
 
-func UpdateCache() {
+func UpdateQuotes() {
 	log.Info("Updating cache...")
 	lt, err := layout.NewDefault("settings.yml", "default")
 	if err != nil {
@@ -609,5 +609,8 @@ func UpdateCache() {
 
 	}
 
+	LatestQuotes["RUB"] = RUBLatest
+	LatestQuotes["USD"] = USDLatest
+	LatestQuotes["EUR"] = EUROLatest
 	log.Info("Cache updated!")
 }

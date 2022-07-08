@@ -74,6 +74,8 @@ type Tx struct {
 	UAHQuote *UAHQuoteClient
 	// USDQuote is the client for interacting with the USDQuote builders.
 	USDQuote *USDQuoteClient
+	// User is the client for interacting with the User builders.
+	User *UserClient
 	// ZARQuote is the client for interacting with the ZARQuote builders.
 	ZARQuote *ZARQuoteClient
 
@@ -242,6 +244,7 @@ func (tx *Tx) init() {
 	tx.TWDQuote = NewTWDQuoteClient(tx.config)
 	tx.UAHQuote = NewUAHQuoteClient(tx.config)
 	tx.USDQuote = NewUSDQuoteClient(tx.config)
+	tx.User = NewUserClient(tx.config)
 	tx.ZARQuote = NewZARQuoteClient(tx.config)
 }
 

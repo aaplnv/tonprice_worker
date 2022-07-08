@@ -36,6 +36,7 @@ import (
 	"main/ent/twdquote"
 	"main/ent/uahquote"
 	"main/ent/usdquote"
+	"main/ent/user"
 	"main/ent/zarquote"
 
 	"entgo.io/ent"
@@ -91,6 +92,7 @@ func columnChecker(table string) func(string) error {
 		twdquote.Table:  twdquote.ValidColumn,
 		uahquote.Table:  uahquote.ValidColumn,
 		usdquote.Table:  usdquote.ValidColumn,
+		user.Table:      user.ValidColumn,
 		zarquote.Table:  zarquote.ValidColumn,
 	}
 	check, ok := checks[table]

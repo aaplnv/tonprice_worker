@@ -381,6 +381,20 @@ var (
 		Columns:    USDColumns,
 		PrimaryKey: []*schema.Column{USDColumns[0]},
 	}
+	// UsersColumns holds the columns for the "Users" table.
+	UsersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "telegram_id", Type: field.TypeInt64, Unique: true},
+		{Name: "active_stable", Type: field.TypeString, Nullable: true},
+		{Name: "all_stables", Type: field.TypeString, Nullable: true},
+		{Name: "reg_time", Type: field.TypeTime},
+	}
+	// UsersTable holds the schema information for the "Users" table.
+	UsersTable = &schema.Table{
+		Name:       "Users",
+		Columns:    UsersColumns,
+		PrimaryKey: []*schema.Column{UsersColumns[0]},
+	}
 	// ZARColumns holds the columns for the "ZAR" table.
 	ZARColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -426,6 +440,7 @@ var (
 		TWDTable,
 		UAHTable,
 		USDTable,
+		UsersTable,
 		ZARTable,
 	}
 )
@@ -523,6 +538,9 @@ func init() {
 	}
 	USDTable.Annotation = &entsql.Annotation{
 		Table: "USD",
+	}
+	UsersTable.Annotation = &entsql.Annotation{
+		Table: "Users",
 	}
 	ZARTable.Annotation = &entsql.Annotation{
 		Table: "ZAR",

@@ -99,5 +99,8 @@ type UAHQuote func(*sql.Selector)
 // USDQuote is the predicate function for usdquote builders.
 type USDQuote func(*sql.Selector)
 
+// User is the predicate function for user builders.
+type User func(*sql.Selector)
+
 // ZARQuote is the predicate function for zarquote builders.
 type ZARQuote func(*sql.Selector)

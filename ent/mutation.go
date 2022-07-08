@@ -38,6 +38,7 @@ import (
 	"main/ent/twdquote"
 	"main/ent/uahquote"
 	"main/ent/usdquote"
+	"main/ent/user"
 	"main/ent/zarquote"
 	"sync"
 	"time"
@@ -85,6 +86,7 @@ const (
 	TypeTWDQuote  = "TWDQuote"
 	TypeUAHQuote  = "UAHQuote"
 	TypeUSDQuote  = "USDQuote"
+	TypeUser      = "User"
 	TypeZARQuote  = "ZARQuote"
 )
 
@@ -12703,6 +12705,556 @@ func (m *USDQuoteMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *USDQuoteMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown USDQuote edge %s", name)
+}
+
+// UserMutation represents an operation that mutates the User nodes in the graph.
+type UserMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *int
+	_TelegramId    *int64
+	add_TelegramId *int64
+	_ActiveStable  *string
+	_AllStables    *string
+	_RegTime       *time.Time
+	clearedFields  map[string]struct{}
+	done           bool
+	oldValue       func(context.Context) (*User, error)
+	predicates     []predicate.User
+}
+
+var _ ent.Mutation = (*UserMutation)(nil)
+
+// userOption allows management of the mutation configuration using functional options.
+type userOption func(*UserMutation)
+
+// newUserMutation creates new mutation for the User entity.
+func newUserMutation(c config, op Op, opts ...userOption) *UserMutation {
+	m := &UserMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeUser,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withUserID sets the ID field of the mutation.
+func withUserID(id int) userOption {
+	return func(m *UserMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *User
+		)
+		m.oldValue = func(ctx context.Context) (*User, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().User.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withUser sets the old User of the mutation.
+func withUser(node *User) userOption {
+	return func(m *UserMutation) {
+		m.oldValue = func(context.Context) (*User, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m UserMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m UserMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *UserMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *UserMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().User.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetTelegramId sets the "TelegramId" field.
+func (m *UserMutation) SetTelegramId(i int64) {
+	m._TelegramId = &i
+	m.add_TelegramId = nil
+}
+
+// TelegramId returns the value of the "TelegramId" field in the mutation.
+func (m *UserMutation) TelegramId() (r int64, exists bool) {
+	v := m._TelegramId
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTelegramId returns the old "TelegramId" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldTelegramId(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTelegramId is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTelegramId requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTelegramId: %w", err)
+	}
+	return oldValue.TelegramId, nil
+}
+
+// AddTelegramId adds i to the "TelegramId" field.
+func (m *UserMutation) AddTelegramId(i int64) {
+	if m.add_TelegramId != nil {
+		*m.add_TelegramId += i
+	} else {
+		m.add_TelegramId = &i
+	}
+}
+
+// AddedTelegramId returns the value that was added to the "TelegramId" field in this mutation.
+func (m *UserMutation) AddedTelegramId() (r int64, exists bool) {
+	v := m.add_TelegramId
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTelegramId resets all changes to the "TelegramId" field.
+func (m *UserMutation) ResetTelegramId() {
+	m._TelegramId = nil
+	m.add_TelegramId = nil
+}
+
+// SetActiveStable sets the "ActiveStable" field.
+func (m *UserMutation) SetActiveStable(s string) {
+	m._ActiveStable = &s
+}
+
+// ActiveStable returns the value of the "ActiveStable" field in the mutation.
+func (m *UserMutation) ActiveStable() (r string, exists bool) {
+	v := m._ActiveStable
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldActiveStable returns the old "ActiveStable" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldActiveStable(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldActiveStable is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldActiveStable requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldActiveStable: %w", err)
+	}
+	return oldValue.ActiveStable, nil
+}
+
+// ClearActiveStable clears the value of the "ActiveStable" field.
+func (m *UserMutation) ClearActiveStable() {
+	m._ActiveStable = nil
+	m.clearedFields[user.FieldActiveStable] = struct{}{}
+}
+
+// ActiveStableCleared returns if the "ActiveStable" field was cleared in this mutation.
+func (m *UserMutation) ActiveStableCleared() bool {
+	_, ok := m.clearedFields[user.FieldActiveStable]
+	return ok
+}
+
+// ResetActiveStable resets all changes to the "ActiveStable" field.
+func (m *UserMutation) ResetActiveStable() {
+	m._ActiveStable = nil
+	delete(m.clearedFields, user.FieldActiveStable)
+}
+
+// SetAllStables sets the "AllStables" field.
+func (m *UserMutation) SetAllStables(s string) {
+	m._AllStables = &s
+}
+
+// AllStables returns the value of the "AllStables" field in the mutation.
+func (m *UserMutation) AllStables() (r string, exists bool) {
+	v := m._AllStables
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAllStables returns the old "AllStables" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldAllStables(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAllStables is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAllStables requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAllStables: %w", err)
+	}
+	return oldValue.AllStables, nil
+}
+
+// ClearAllStables clears the value of the "AllStables" field.
+func (m *UserMutation) ClearAllStables() {
+	m._AllStables = nil
+	m.clearedFields[user.FieldAllStables] = struct{}{}
+}
+
+// AllStablesCleared returns if the "AllStables" field was cleared in this mutation.
+func (m *UserMutation) AllStablesCleared() bool {
+	_, ok := m.clearedFields[user.FieldAllStables]
+	return ok
+}
+
+// ResetAllStables resets all changes to the "AllStables" field.
+func (m *UserMutation) ResetAllStables() {
+	m._AllStables = nil
+	delete(m.clearedFields, user.FieldAllStables)
+}
+
+// SetRegTime sets the "RegTime" field.
+func (m *UserMutation) SetRegTime(t time.Time) {
+	m._RegTime = &t
+}
+
+// RegTime returns the value of the "RegTime" field in the mutation.
+func (m *UserMutation) RegTime() (r time.Time, exists bool) {
+	v := m._RegTime
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegTime returns the old "RegTime" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldRegTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegTime: %w", err)
+	}
+	return oldValue.RegTime, nil
+}
+
+// ResetRegTime resets all changes to the "RegTime" field.
+func (m *UserMutation) ResetRegTime() {
+	m._RegTime = nil
+}
+
+// Where appends a list predicates to the UserMutation builder.
+func (m *UserMutation) Where(ps ...predicate.User) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *UserMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (User).
+func (m *UserMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *UserMutation) Fields() []string {
+	fields := make([]string, 0, 4)
+	if m._TelegramId != nil {
+		fields = append(fields, user.FieldTelegramId)
+	}
+	if m._ActiveStable != nil {
+		fields = append(fields, user.FieldActiveStable)
+	}
+	if m._AllStables != nil {
+		fields = append(fields, user.FieldAllStables)
+	}
+	if m._RegTime != nil {
+		fields = append(fields, user.FieldRegTime)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *UserMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case user.FieldTelegramId:
+		return m.TelegramId()
+	case user.FieldActiveStable:
+		return m.ActiveStable()
+	case user.FieldAllStables:
+		return m.AllStables()
+	case user.FieldRegTime:
+		return m.RegTime()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case user.FieldTelegramId:
+		return m.OldTelegramId(ctx)
+	case user.FieldActiveStable:
+		return m.OldActiveStable(ctx)
+	case user.FieldAllStables:
+		return m.OldAllStables(ctx)
+	case user.FieldRegTime:
+		return m.OldRegTime(ctx)
+	}
+	return nil, fmt.Errorf("unknown User field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *UserMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case user.FieldTelegramId:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTelegramId(v)
+		return nil
+	case user.FieldActiveStable:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetActiveStable(v)
+		return nil
+	case user.FieldAllStables:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAllStables(v)
+		return nil
+	case user.FieldRegTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegTime(v)
+		return nil
+	}
+	return fmt.Errorf("unknown User field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *UserMutation) AddedFields() []string {
+	var fields []string
+	if m.add_TelegramId != nil {
+		fields = append(fields, user.FieldTelegramId)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case user.FieldTelegramId:
+		return m.AddedTelegramId()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *UserMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case user.FieldTelegramId:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTelegramId(v)
+		return nil
+	}
+	return fmt.Errorf("unknown User numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *UserMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(user.FieldActiveStable) {
+		fields = append(fields, user.FieldActiveStable)
+	}
+	if m.FieldCleared(user.FieldAllStables) {
+		fields = append(fields, user.FieldAllStables)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *UserMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *UserMutation) ClearField(name string) error {
+	switch name {
+	case user.FieldActiveStable:
+		m.ClearActiveStable()
+		return nil
+	case user.FieldAllStables:
+		m.ClearAllStables()
+		return nil
+	}
+	return fmt.Errorf("unknown User nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *UserMutation) ResetField(name string) error {
+	switch name {
+	case user.FieldTelegramId:
+		m.ResetTelegramId()
+		return nil
+	case user.FieldActiveStable:
+		m.ResetActiveStable()
+		return nil
+	case user.FieldAllStables:
+		m.ResetAllStables()
+		return nil
+	case user.FieldRegTime:
+		m.ResetRegTime()
+		return nil
+	}
+	return fmt.Errorf("unknown User field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *UserMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *UserMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *UserMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *UserMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *UserMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *UserMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *UserMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown User unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *UserMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown User edge %s", name)
 }
 
 // ZARQuoteMutation represents an operation that mutates the ZARQuote nodes in the graph.
