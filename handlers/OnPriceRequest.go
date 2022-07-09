@@ -6,23 +6,44 @@ import (
 	"gopkg.in/telebot.v3"
 	"gopkg.in/telebot.v3/layout"
 	"main/cache"
+	"main/currsettings"
+	"main/database"
 )
 
 func OnPriceRequest(c telebot.Context) error {
+	// Layout temporary initiates here
 	lt, err := layout.NewDefault("settings.yml", "default")
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Log this event
 	log.WithFields(log.Fields{
-		"ID":       c.Message().Sender.ID,
-		"Username": c.Message().Sender.Username,
+		"ID":       c.Sender().ID,
+		"Username": c.Sender().Username,
 	}).Info("New price request")
-	currency := "RUB"
-	answer := buildPriceRow(currency, lt) + "\n\n" + lt.Text("exchanges_row") + "\n\n" + lt.Text("ad_row")
-	if currency == "USD" {
-		c.EditOrSend(answer, lt.Markup("swap", "RUB"))
+
+	// Get the user's settings
+	user := database.GetUser(c.Sender().ID)
+	stables := currsettings.Create(user)
+
+	if HasCallbackData(c.Callback()) {
+		stables.SetActive(c.Callback().Data)
 	}
-	c.EditOrSend(answer, lt.Markup("swap", "USD"))
+
+	// If there is no stables selected, show the list of stables
+	if len(stables.All) == 0 {
+		return OnSelect(c)
+	}
+
+	answer := buildPriceRow(stables.Active, lt) + "\n\n" + lt.Text("exchanges_row") + "\n\n" + lt.Text("ad_row")
+
+	if len(stables.All) < 2 {
+		c.EditOrSend(answer, lt.Markup("other"))
+	} else {
+		c.EditOrSend(answer, lt.Markup("swap", stables.NextTicker(), stables.NextTicker()))
+	}
+	c.Respond()
 	return nil
 }
 

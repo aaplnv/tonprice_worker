@@ -21,15 +21,19 @@ func StartBot() {
 		return
 	}
 
-	bot.Handle("/select", handlers.OnSelect)
-
 	log.Info("Logged in!")
+
+	bot.Handle("/select", handlers.OnSelect)
 
 	bot.Handle("/start", handlers.OnPriceRequest)
 
-	bot.Handle(lt.Callback("select"), handlers.OnSelect)
+	bot.Handle(lt.Callback("selector"), handlers.OnSelect)
 
 	bot.Handle(lt.Callback("swap"), handlers.OnPriceRequest)
+
+	bot.Handle(lt.Callback("done"), handlers.OnPriceRequest)
+
+	bot.Handle(lt.Callback("other_currency"), handlers.OnSelect)
 
 	log.Info("Starting a bot...")
 	bot.Start()

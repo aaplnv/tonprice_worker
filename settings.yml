@@ -7,22 +7,23 @@ buttons:
     unique: swap
     callback_data: '{{ . }}'
     text: 🔄 {{ . }}
-  select:
-    unique: select
+  selector:
+    unique: selector
     callback_data: '{{ .Ticker }}'
-    text: ✅ {{ .Text }}
+    text: '{{ .Text }}'
   done:
     unique: done
-    text: Завершить
+    text: Next ––>
+  other_currency:
+    unique: other
+    text: 🔄 Other currency
 
 markups:
   swap:
     - [ swap ]
 
-  select:
-    - [ select, select, select, select, select ]
-    - [ select ]
-    - [ done ]
+  other:
+    - [ other_currency ]
 
 config:
   currencies:

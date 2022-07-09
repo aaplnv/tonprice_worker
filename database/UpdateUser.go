@@ -9,7 +9,7 @@ import (
 	"main/ent/user"
 )
 
-func SetAllStables(currencies string, id int64) {
+func UpdateUser(telegramID int64, all string, active string) error {
 	lt, err := layout.NewDefault("settings.yml", "default")
 	if err != nil {
 		log.Fatal(err)
@@ -20,9 +20,10 @@ func SetAllStables(currencies string, id int64) {
 	}
 	defer client.Close()
 
-	_, err = client.User.Update().Where(user.TelegramId(id)).SetAllStables(currencies).Save(context.Background())
+	_, err = client.User.Update().Where(user.TelegramId(telegramID)).SetAllStables(all).SetActiveStable(active).Save(context.Background())
 
 	if err != nil {
 		log.Error(err)
 	}
+	return err
 }
