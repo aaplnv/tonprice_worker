@@ -13,14 +13,13 @@ type User struct {
 
 func (User) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "Users"},
+		entsql.Annotation{Table: "users"},
 	}
 }
 
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int64("TelegramId").Unique(),
-		field.String("ActiveStable").Optional(),
+		field.Int64("TelegramId"),
 		field.String("AllStables").Optional(),
 		field.Time("RegTime"),
 	}

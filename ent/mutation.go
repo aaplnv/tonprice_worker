@@ -12715,7 +12715,6 @@ type UserMutation struct {
 	id             *int
 	_TelegramId    *int64
 	add_TelegramId *int64
-	_ActiveStable  *string
 	_AllStables    *string
 	_RegTime       *time.Time
 	clearedFields  map[string]struct{}
@@ -12878,55 +12877,6 @@ func (m *UserMutation) ResetTelegramId() {
 	m.add_TelegramId = nil
 }
 
-// SetActiveStable sets the "ActiveStable" field.
-func (m *UserMutation) SetActiveStable(s string) {
-	m._ActiveStable = &s
-}
-
-// ActiveStable returns the value of the "ActiveStable" field in the mutation.
-func (m *UserMutation) ActiveStable() (r string, exists bool) {
-	v := m._ActiveStable
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldActiveStable returns the old "ActiveStable" field's value of the User entity.
-// If the User object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldActiveStable(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldActiveStable is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldActiveStable requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldActiveStable: %w", err)
-	}
-	return oldValue.ActiveStable, nil
-}
-
-// ClearActiveStable clears the value of the "ActiveStable" field.
-func (m *UserMutation) ClearActiveStable() {
-	m._ActiveStable = nil
-	m.clearedFields[user.FieldActiveStable] = struct{}{}
-}
-
-// ActiveStableCleared returns if the "ActiveStable" field was cleared in this mutation.
-func (m *UserMutation) ActiveStableCleared() bool {
-	_, ok := m.clearedFields[user.FieldActiveStable]
-	return ok
-}
-
-// ResetActiveStable resets all changes to the "ActiveStable" field.
-func (m *UserMutation) ResetActiveStable() {
-	m._ActiveStable = nil
-	delete(m.clearedFields, user.FieldActiveStable)
-}
-
 // SetAllStables sets the "AllStables" field.
 func (m *UserMutation) SetAllStables(s string) {
 	m._AllStables = &s
@@ -13031,12 +12981,9 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 3)
 	if m._TelegramId != nil {
 		fields = append(fields, user.FieldTelegramId)
-	}
-	if m._ActiveStable != nil {
-		fields = append(fields, user.FieldActiveStable)
 	}
 	if m._AllStables != nil {
 		fields = append(fields, user.FieldAllStables)
@@ -13054,8 +13001,6 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case user.FieldTelegramId:
 		return m.TelegramId()
-	case user.FieldActiveStable:
-		return m.ActiveStable()
 	case user.FieldAllStables:
 		return m.AllStables()
 	case user.FieldRegTime:
@@ -13071,8 +13016,6 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case user.FieldTelegramId:
 		return m.OldTelegramId(ctx)
-	case user.FieldActiveStable:
-		return m.OldActiveStable(ctx)
 	case user.FieldAllStables:
 		return m.OldAllStables(ctx)
 	case user.FieldRegTime:
@@ -13092,13 +13035,6 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTelegramId(v)
-		return nil
-	case user.FieldActiveStable:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetActiveStable(v)
 		return nil
 	case user.FieldAllStables:
 		v, ok := value.(string)
@@ -13159,9 +13095,6 @@ func (m *UserMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *UserMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(user.FieldActiveStable) {
-		fields = append(fields, user.FieldActiveStable)
-	}
 	if m.FieldCleared(user.FieldAllStables) {
 		fields = append(fields, user.FieldAllStables)
 	}
@@ -13179,9 +13112,6 @@ func (m *UserMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *UserMutation) ClearField(name string) error {
 	switch name {
-	case user.FieldActiveStable:
-		m.ClearActiveStable()
-		return nil
 	case user.FieldAllStables:
 		m.ClearAllStables()
 		return nil
@@ -13195,9 +13125,6 @@ func (m *UserMutation) ResetField(name string) error {
 	switch name {
 	case user.FieldTelegramId:
 		m.ResetTelegramId()
-		return nil
-	case user.FieldActiveStable:
-		m.ResetActiveStable()
 		return nil
 	case user.FieldAllStables:
 		m.ResetAllStables()

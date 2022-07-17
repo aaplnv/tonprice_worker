@@ -41,26 +41,6 @@ func (uu *UserUpdate) AddTelegramId(i int64) *UserUpdate {
 	return uu
 }
 
-// SetActiveStable sets the "ActiveStable" field.
-func (uu *UserUpdate) SetActiveStable(s string) *UserUpdate {
-	uu.mutation.SetActiveStable(s)
-	return uu
-}
-
-// SetNillableActiveStable sets the "ActiveStable" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableActiveStable(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetActiveStable(*s)
-	}
-	return uu
-}
-
-// ClearActiveStable clears the value of the "ActiveStable" field.
-func (uu *UserUpdate) ClearActiveStable() *UserUpdate {
-	uu.mutation.ClearActiveStable()
-	return uu
-}
-
 // SetAllStables sets the "AllStables" field.
 func (uu *UserUpdate) SetAllStables(s string) *UserUpdate {
 	uu.mutation.SetAllStables(s)
@@ -178,19 +158,6 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: user.FieldTelegramId,
 		})
 	}
-	if value, ok := uu.mutation.ActiveStable(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldActiveStable,
-		})
-	}
-	if uu.mutation.ActiveStableCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: user.FieldActiveStable,
-		})
-	}
 	if value, ok := uu.mutation.AllStables(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -240,26 +207,6 @@ func (uuo *UserUpdateOne) SetTelegramId(i int64) *UserUpdateOne {
 // AddTelegramId adds i to the "TelegramId" field.
 func (uuo *UserUpdateOne) AddTelegramId(i int64) *UserUpdateOne {
 	uuo.mutation.AddTelegramId(i)
-	return uuo
-}
-
-// SetActiveStable sets the "ActiveStable" field.
-func (uuo *UserUpdateOne) SetActiveStable(s string) *UserUpdateOne {
-	uuo.mutation.SetActiveStable(s)
-	return uuo
-}
-
-// SetNillableActiveStable sets the "ActiveStable" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableActiveStable(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetActiveStable(*s)
-	}
-	return uuo
-}
-
-// ClearActiveStable clears the value of the "ActiveStable" field.
-func (uuo *UserUpdateOne) ClearActiveStable() *UserUpdateOne {
-	uuo.mutation.ClearActiveStable()
 	return uuo
 }
 
@@ -402,19 +349,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Type:   field.TypeInt64,
 			Value:  value,
 			Column: user.FieldTelegramId,
-		})
-	}
-	if value, ok := uuo.mutation.ActiveStable(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldActiveStable,
-		})
-	}
-	if uuo.mutation.ActiveStableCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: user.FieldActiveStable,
 		})
 	}
 	if value, ok := uuo.mutation.AllStables(); ok {

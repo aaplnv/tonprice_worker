@@ -16,18 +16,13 @@ func (s *settings) IsAdded(stable string) bool {
 	}
 }
 
-func (s *settings) SetActive(stable string) {
-	s.Active = stable
-	s.Save()
-}
-
 func (s *settings) AddStable(stable string) {
 	s.All = append(s.All, stable)
 	s.Save()
 }
 
 func (s *settings) Save() {
-	database.UpdateUser(s.TelegramId, strings.Join(s.All, " "), s.Active)
+	database.UpdateUser(s.TelegramId, strings.Join(s.All, " "))
 }
 
 func (s *settings) RemoveStable(stable string) {
@@ -52,39 +47,22 @@ func sliceIndex(limit int, predicate func(i int) bool) int {
 }
 
 func Create(user *ent.User) (s settings) {
-	saveRequired := false
-
 	s.TelegramId = user.TelegramId
 
 	for _, stable := range strings.Split(user.AllStables, " ") {
 		if stable == "" {
 			continue
 		}
+
+		// TODO: If stable in not supported
 		s.All = append(s.All, stable)
-	}
-
-	s.Active = user.ActiveStable
-
-	if !s.IsAdded(s.Active) {
-		s.Active = ""
-		saveRequired = true
-	}
-
-	if s.Active == "" && len(s.All) > 0 {
-		user.ActiveStable = s.All[0]
-		s.Active = user.ActiveStable
-		saveRequired = true
-	}
-
-	if saveRequired {
-		s.Save()
 	}
 	return
 }
 
-func (s *settings) NextTicker() string {
+func (s *settings) NextTicker(activeTicker string) string {
 	index := sliceIndex(len(s.All), func(i int) bool {
-		return s.All[i] == s.Active
+		return s.All[i] == activeTicker
 	})
 
 	if (index + 1) == len(s.All) {
@@ -96,6 +74,5 @@ func (s *settings) NextTicker() string {
 
 type settings struct {
 	TelegramId int64
-	Active     string
 	All        []string
 }

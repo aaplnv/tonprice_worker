@@ -27,21 +27,17 @@ func OnPriceRequest(c telebot.Context) error {
 	user := database.GetUser(c.Sender().ID)
 	stables := currsettings.Create(user)
 
-	if HasCallbackData(c.Callback()) {
-		stables.SetActive(c.Callback().Data)
-	}
-
 	// If there is no stables selected, show the list of stables
 	if len(stables.All) == 0 {
 		return OnSelect(c)
 	}
 
-	answer := buildPriceRow(stables.Active, lt) + "\n\n" + lt.Text("exchanges_row") + "\n\n" + lt.Text("ad_row")
+	answer := buildPriceRow(c.Callback().Data, lt) + "\n\n" + lt.Text("exchanges_row") + "\n\n" + lt.Text("ad_row")
 
 	if len(stables.All) < 2 {
 		c.EditOrSend(answer, lt.Markup("other"))
 	} else {
-		c.EditOrSend(answer, lt.Markup("swap", stables.NextTicker(), stables.NextTicker()))
+		c.EditOrSend(answer, lt.Markup("swap", stables.NextTicker(c.Callback().Data), stables.NextTicker(c.Callback().Data)))
 	}
 	c.Respond()
 	return nil

@@ -9,21 +9,18 @@ const (
 	FieldID = "id"
 	// FieldTelegramId holds the string denoting the telegramid field in the database.
 	FieldTelegramId = "telegram_id"
-	// FieldActiveStable holds the string denoting the activestable field in the database.
-	FieldActiveStable = "active_stable"
 	// FieldAllStables holds the string denoting the allstables field in the database.
 	FieldAllStables = "all_stables"
 	// FieldRegTime holds the string denoting the regtime field in the database.
 	FieldRegTime = "reg_time"
 	// Table holds the table name of the user in the database.
-	Table = "Users"
+	Table = "users"
 )
 
 // Columns holds all SQL columns for user fields.
 var Columns = []string{
 	FieldID,
 	FieldTelegramId,
-	FieldActiveStable,
 	FieldAllStables,
 	FieldRegTime,
 }

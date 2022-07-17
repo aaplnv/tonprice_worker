@@ -381,17 +381,16 @@ var (
 		Columns:    USDColumns,
 		PrimaryKey: []*schema.Column{USDColumns[0]},
 	}
-	// UsersColumns holds the columns for the "Users" table.
+	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "telegram_id", Type: field.TypeInt64, Unique: true},
-		{Name: "active_stable", Type: field.TypeString, Nullable: true},
 		{Name: "all_stables", Type: field.TypeString, Nullable: true},
 		{Name: "reg_time", Type: field.TypeTime},
 	}
-	// UsersTable holds the schema information for the "Users" table.
+	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
-		Name:       "Users",
+		Name:       "users",
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 	}
@@ -540,7 +539,7 @@ func init() {
 		Table: "USD",
 	}
 	UsersTable.Annotation = &entsql.Annotation{
-		Table: "Users",
+		Table: "users",
 	}
 	ZARTable.Annotation = &entsql.Annotation{
 		Table: "ZAR",

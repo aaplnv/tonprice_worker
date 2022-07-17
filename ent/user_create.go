@@ -26,20 +26,6 @@ func (uc *UserCreate) SetTelegramId(i int64) *UserCreate {
 	return uc
 }
 
-// SetActiveStable sets the "ActiveStable" field.
-func (uc *UserCreate) SetActiveStable(s string) *UserCreate {
-	uc.mutation.SetActiveStable(s)
-	return uc
-}
-
-// SetNillableActiveStable sets the "ActiveStable" field if the given value is not nil.
-func (uc *UserCreate) SetNillableActiveStable(s *string) *UserCreate {
-	if s != nil {
-		uc.SetActiveStable(*s)
-	}
-	return uc
-}
-
 // SetAllStables sets the "AllStables" field.
 func (uc *UserCreate) SetAllStables(s string) *UserCreate {
 	uc.mutation.SetAllStables(s)
@@ -170,14 +156,6 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldTelegramId,
 		})
 		_node.TelegramId = value
-	}
-	if value, ok := uc.mutation.ActiveStable(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldActiveStable,
-		})
-		_node.ActiveStable = value
 	}
 	if value, ok := uc.mutation.AllStables(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

@@ -18,8 +18,6 @@ type User struct {
 	ID int `json:"id,omitempty"`
 	// TelegramId holds the value of the "TelegramId" field.
 	TelegramId int64 `json:"TelegramId,omitempty"`
-	// ActiveStable holds the value of the "ActiveStable" field.
-	ActiveStable string `json:"ActiveStable,omitempty"`
 	// AllStables holds the value of the "AllStables" field.
 	AllStables string `json:"AllStables,omitempty"`
 	// RegTime holds the value of the "RegTime" field.
@@ -33,7 +31,7 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case user.FieldID, user.FieldTelegramId:
 			values[i] = new(sql.NullInt64)
-		case user.FieldActiveStable, user.FieldAllStables:
+		case user.FieldAllStables:
 			values[i] = new(sql.NullString)
 		case user.FieldRegTime:
 			values[i] = new(sql.NullTime)
@@ -63,12 +61,6 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field TelegramId", values[i])
 			} else if value.Valid {
 				u.TelegramId = value.Int64
-			}
-		case user.FieldActiveStable:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field ActiveStable", values[i])
-			} else if value.Valid {
-				u.ActiveStable = value.String
 			}
 		case user.FieldAllStables:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -112,8 +104,6 @@ func (u *User) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", u.ID))
 	builder.WriteString(", TelegramId=")
 	builder.WriteString(fmt.Sprintf("%v", u.TelegramId))
-	builder.WriteString(", ActiveStable=")
-	builder.WriteString(u.ActiveStable)
 	builder.WriteString(", AllStables=")
 	builder.WriteString(u.AllStables)
 	builder.WriteString(", RegTime=")
