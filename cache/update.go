@@ -70,7 +70,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			AEDLatest = LatestQuote{
+			LatestQuotes["AED"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -87,7 +87,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			ARSLatest = LatestQuote{
+			LatestQuotes["ARS"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -104,7 +104,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			AUDLatest = LatestQuote{
+			LatestQuotes["AUD"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -121,7 +121,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			BHDLatest = LatestQuote{
+			LatestQuotes["BHD"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -138,7 +138,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			BRLLatest = LatestQuote{
+			LatestQuotes["BRL"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -156,7 +156,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			BTCLatest = LatestQuote{
+			LatestQuotes["BTC"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -174,7 +174,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			CADLatest = LatestQuote{
+			LatestQuotes["CAD"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -192,7 +192,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			CHFLatest = LatestQuote{
+			LatestQuotes["CHF"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -209,7 +209,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			CLPLatest = LatestQuote{
+			LatestQuotes["CLP"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -226,7 +226,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			CNYLatest = LatestQuote{
+			LatestQuotes["CNY"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -243,7 +243,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			CZKLatest = LatestQuote{
+			LatestQuotes["CZK"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -260,7 +260,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			EUROLatest = LatestQuote{
+			LatestQuotes["EUR"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -277,7 +277,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			GBPLatest = LatestQuote{
+			LatestQuotes["GBP"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -294,7 +294,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			HKDLatest = LatestQuote{
+			LatestQuotes["HKD"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -311,7 +311,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			HUFLatest = LatestQuote{
+			LatestQuotes["HUF"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -328,7 +328,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			IDRLatest = LatestQuote{
+			LatestQuotes["IDR"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -345,7 +345,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			ILSLatest = LatestQuote{
+			LatestQuotes["ILS"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -362,7 +362,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			INRLatest = LatestQuote{
+			LatestQuotes["INR"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -379,7 +379,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			JPYLatest = LatestQuote{
+			LatestQuotes["JPY"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -396,7 +396,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			MXNLatest = LatestQuote{
+			LatestQuotes["MXN"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -413,7 +413,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			NOKLatest = LatestQuote{
+			LatestQuotes["NOK"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -430,7 +430,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			NZDLatest = LatestQuote{
+			LatestQuotes["NZD"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -447,7 +447,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			PKRLatest = LatestQuote{
+			LatestQuotes["PKR"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -464,7 +464,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			PLNLatest = LatestQuote{
+			LatestQuotes["PLN"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -481,7 +481,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			RUBLatest = LatestQuote{
+			LatestQuotes["RUB"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -499,7 +499,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			SARLatest = LatestQuote{
+			LatestQuotes["SAR"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -516,7 +516,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			SEKLatest = LatestQuote{
+			LatestQuotes["SEK"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -533,7 +533,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			TRYLatest = LatestQuote{
+			LatestQuotes["TRY"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -550,7 +550,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			TWDLatest = LatestQuote{
+			LatestQuotes["TWD"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -567,7 +567,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			UAHLatest = LatestQuote{
+			LatestQuotes["UAH"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -584,7 +584,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			USDLatest = LatestQuote{
+			LatestQuotes["USD"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -601,7 +601,7 @@ func UpdateQuotes() {
 			// Somewhere here we should build charts
 			//
 
-			ZARLatest = LatestQuote{
+			LatestQuotes["ZAR"] = LatestQuote{
 				Price:     query[len(query)-1:][0].Price,
 				Timestamp: query[len(query)-1:][0].Timestamp,
 			}
@@ -609,8 +609,5 @@ func UpdateQuotes() {
 
 	}
 
-	LatestQuotes["RUB"] = RUBLatest
-	LatestQuotes["USD"] = USDLatest
-	LatestQuotes["EUR"] = EUROLatest
 	log.Info("Cache updated!")
 }
