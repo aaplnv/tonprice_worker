@@ -7,7 +7,7 @@ import (
 )
 
 func (s *settings) IsAdded(stable string) bool {
-	if sliceIndex(len(s.All), func(i int) bool {
+	if getIndex(len(s.All), func(i int) bool {
 		return s.All[i] == stable
 	}) == -1 {
 		return false
@@ -26,7 +26,7 @@ func (s *settings) Save() {
 }
 
 func (s *settings) RemoveStable(stable string) {
-	index := sliceIndex(len(s.All), func(i int) bool {
+	index := getIndex(len(s.All), func(i int) bool {
 		return s.All[i] == stable
 	})
 
@@ -37,15 +37,6 @@ func (s *settings) RemoveStable(stable string) {
 	s.Save()
 }
 
-func sliceIndex(limit int, predicate func(i int) bool) int {
-	for i := 0; i < limit; i++ {
-		if predicate(i) {
-			return i
-		}
-	}
-	return -1
-}
-
 func Create(user *ent.User) (s settings) {
 	s.TelegramId = user.TelegramId
 
@@ -53,7 +44,6 @@ func Create(user *ent.User) (s settings) {
 		if stable == "" {
 			continue
 		}
-
 		// TODO: If stable in not supported
 		s.All = append(s.All, stable)
 	}
@@ -61,7 +51,7 @@ func Create(user *ent.User) (s settings) {
 }
 
 func (s *settings) NextTicker(activeTicker string) string {
-	index := sliceIndex(len(s.All), func(i int) bool {
+	index := getIndex(len(s.All), func(i int) bool {
 		return s.All[i] == activeTicker
 	})
 
@@ -75,4 +65,13 @@ func (s *settings) NextTicker(activeTicker string) string {
 type settings struct {
 	TelegramId int64
 	All        []string
+}
+
+func getIndex(limit int, predicate func(i int) bool) int {
+	for i := 0; i < limit; i++ {
+		if predicate(i) {
+			return i
+		}
+	}
+	return -1
 }

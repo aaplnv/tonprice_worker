@@ -13,7 +13,7 @@ func StartBot() {
 		log.Fatal(err)
 	}
 
-	log.Info("Telegram trying to login...")
+	log.Info("Logging in to Telegram")
 
 	bot, err := telebot.NewBot(lt.Settings())
 	if err != nil {
