@@ -70,9 +70,11 @@ func OnSelect(c telebot.Context) error {
 
 	// if user has any currency, allow him to exit
 	if len(currs.All) != 0 {
-		m.Inline(m.Row(btns...), m.Row(*lt.Button("done")))
+		buttons := m.Split(4, btns)
+		buttons = append(buttons, m.Row(*lt.Button("done")))
+		m.Inline(buttons...)
 	} else {
-		m.Inline(m.Row(btns...))
+		m.Inline(m.Split(4, btns)...)
 	}
 
 	return c.EditOrSend("Select currency", m)
