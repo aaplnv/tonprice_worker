@@ -23,7 +23,7 @@ func StartBot() {
 
 	log.Info("Logged in!")
 
-	bot.Handle("/select", handlers.OnSelect)
+	bot.Handle("/settings", handlers.OnSelect)
 
 	bot.Handle("/start", handlers.OnPriceRequest)
 
