@@ -6,7 +6,7 @@ import (
 	"gopkg.in/telebot.v3"
 	"gopkg.in/telebot.v3/layout"
 	"main/cache"
-	"main/currsettings"
+	"main/currencies"
 	"main/database"
 )
 
@@ -25,7 +25,7 @@ func OnPriceRequest(c telebot.Context) error {
 
 	// Get the user's settings
 	user := database.GetUser(c.Sender().ID)
-	stables := currsettings.Create(user)
+	stables := currencies.Create(user)
 
 	// If there is no stables selected, show the list of stables
 	if len(stables.All) == 0 {

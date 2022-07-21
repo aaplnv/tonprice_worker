@@ -1,4 +1,4 @@
-package currsettings
+package currencies
 
 import (
 	log "github.com/sirupsen/logrus"

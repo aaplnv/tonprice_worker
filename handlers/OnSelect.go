@@ -4,7 +4,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/telebot.v3"
 	"gopkg.in/telebot.v3/layout"
-	"main/currsettings"
+	"main/currencies"
 	"main/database"
 )
 
@@ -23,7 +23,7 @@ func OnSelect(c telebot.Context) error {
 
 	// Get user from database
 	user := database.GetUser(c.Sender().ID)
-	currs := currsettings.Create(user)
+	currs := currencies.Create(user)
 
 	// If request contains a currency, add or remove it from user's list
 	if HasCallbackData(c.Callback()) {
