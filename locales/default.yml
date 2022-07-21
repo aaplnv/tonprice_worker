@@ -1,3 +1,6 @@
 price_row: "💎 Toncoin price:"
 exchanges_row: "Buy TON with FTX, MEXC and EXMO"
 ad_row: "Subscribe to my channel: @durov"
+exit_settings_btn: "Finish"
+other_currency_btn: "🔄 Other currency"
+currency_select_row: "Select currency:"

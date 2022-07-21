@@ -25,7 +25,6 @@ func GetUser(id int64) *ent.User {
 
 	user, err := client.User.Query().Where(user.TelegramId(id)).Only(context.Background())
 	if err != nil {
-		log.Debugf("New user detected")
 		user, err = client.User.Create().SetTelegramId(id).SetRegTime(time.Now()).Save(context.Background())
 		if err != nil {
 			log.Error(err)

@@ -13,10 +13,10 @@ buttons:
     text: '{{ .Text }}'
   done:
     unique: done
-    text: Next ––>
+    text: '{{ . }}'
   other_currency:
     unique: other
-    text: 🔄 Other currency
+    text: '{{ text `other_currency_btn` }}'
 
 markups:
   swap:
