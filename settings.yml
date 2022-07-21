@@ -1,0 +1,38 @@
+settings:
+  token:
+  parse_mode: html
+
+buttons:
+  swap:
+    unique: swap
+    callback_data: '{{ . }}'
+    text: 🔄 {{ . }}
+  selector:
+    unique: selector
+    callback_data: '{{ .Ticker }}'
+    text: '{{ .Text }}'
+  done:
+    unique: done
+    text: '{{ . }}'
+  other_currency:
+    unique: other
+    text: '{{ text `other_currency_btn` }}'
+
+markups:
+  swap:
+    - [ swap ]
+
+  other:
+    - [ other_currency ]
+
+config:
+  currencies:
+    - RUB
+    - USD
+    - EUR
+    - GBP
+  mariadb.host:
+  mariadb.port:
+  mariadb.login:
+  mariadb.password:
+  mariadb.database:

@@ -1,43 +1,39 @@
 package telegram
 
 import (
-	"fmt"
 	log "github.com/sirupsen/logrus"
-	botapi "gopkg.in/telebot.v3"
-	"main/markets"
-	"os"
-	"time"
+	"gopkg.in/telebot.v3"
+	"gopkg.in/telebot.v3/layout"
+	"main/handlers"
 )
 
 func StartBot() {
-	pref := botapi.Settings{
-		Token:  os.Getenv("TELEGRAM_BOT_APIKEY"),
-		Poller: &botapi.LongPoller{Timeout: 10 * time.Second},
+	lt, err := layout.NewDefault("settings.yml", "default")
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	log.Info("Telegram trying to login...")
-	bot, err := botapi.NewBot(pref)
+	log.Info("Logging in to Telegram")
+
+	bot, err := telebot.NewBot(lt.Settings())
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
+
 	log.Info("Logged in!")
 
-	bot.Handle("/start", func(c botapi.Context) error {
-		log.WithFields(log.Fields{
-			"ID":       c.Message().Sender.ID,
-			"Username": c.Message().Sender.Username,
-		}).Info("New price request")
+	bot.Handle("/settings", handlers.OnSelect)
 
-		fiat := os.Getenv("FIAT_CURRENCY")
-		price, err := markets.GetPrice(fiat)
-		if err != nil {
-			return c.Send(fmt.Sprintln("Sorry, failed to get price from CoinMarketCap"))
-		}
+	bot.Handle("/start", handlers.OnPriceRequest)
 
-		answer := fmt.Sprint(os.Getenv("PRICE_ROW"), " ", price, " ", fiat) + "\n\n" + os.Getenv("EXCHANGES_ROW") + "\n\n" + os.Getenv("AD_ROW")
-		return c.Send(answer)
-	})
+	bot.Handle(lt.Callback("selector"), handlers.OnSelect)
+
+	bot.Handle(lt.Callback("swap"), handlers.OnPriceRequest)
+
+	bot.Handle(lt.Callback("done"), handlers.OnPriceRequest)
+
+	bot.Handle(lt.Callback("other_currency"), handlers.OnSelect)
 
 	log.Info("Starting a bot...")
 	bot.Start()
