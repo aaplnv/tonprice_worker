@@ -35,3 +35,4 @@ config:
   mariadb.port:
   mariadb.login:
   mariadb.password:
+  mariadb.database:

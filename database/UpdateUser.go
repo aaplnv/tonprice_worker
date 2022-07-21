@@ -14,7 +14,7 @@ func UpdateUser(telegramID int64, all string) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	client, err := ent.Open("mysql", fmt.Sprint(lt.String("mariadb.login"), ":", lt.String("mariadb.password"), "@tcp(", lt.String("mariadb.host"), ":", lt.String("mariadb.port"), ")/test-one?parseTime=True"))
+	client, err := ent.Open("mysql", fmt.Sprint(lt.String("mariadb.login"), ":", lt.String("mariadb.password"), "@tcp(", lt.String("mariadb.host"), ":", lt.String("mariadb.port"), ")/", lt.String("mariadb.database"), "?parseTime=True"))
 	if err != nil {
 		log.Error("Can't connect to MySQL", err)
 	}
