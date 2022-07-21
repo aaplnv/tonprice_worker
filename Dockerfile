@@ -14,4 +14,5 @@ RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -
 COPY --from=builder /build/main /app/
 WORKDIR /app
 COPY settings.yml ./
+COPY locales ./locales
 CMD ["./main"]
