@@ -1,6 +1,8 @@
 package currsettings
 
 import (
+	log "github.com/sirupsen/logrus"
+	"gopkg.in/telebot.v3/layout"
 	"main/database"
 	"main/ent"
 	"strings"
@@ -38,14 +40,32 @@ func (s *settings) RemoveStable(stable string) {
 }
 
 func Create(user *ent.User) (s settings) {
+	saveRequired := false
 	s.TelegramId = user.TelegramId
 
 	for _, stable := range strings.Split(user.AllStables, " ") {
 		if stable == "" {
 			continue
+			saveRequired = true
 		}
-		// TODO: If stable in not supported
+
+		lt, err := layout.NewDefault("settings.yml", "default")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if getIndex(len(lt.Strings("currencies")), func(i int) bool {
+			return lt.Strings("currencies")[i] == stable
+		}) == -1 {
+			continue
+			saveRequired = true
+		}
+
 		s.All = append(s.All, stable)
+	}
+
+	if saveRequired {
+		s.Save()
 	}
 	return
 }
